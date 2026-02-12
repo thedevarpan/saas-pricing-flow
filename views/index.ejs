@@ -941,150 +941,71 @@
                 </div>
                 <div class="container">
                     <div class="row g-4 g-lg-0 align-items-lg-end">
-                        <div class="col-md-6 col-lg-4 price-card-4 gsap-fade-in" data-scroll-trigger="true" data-y="15" data-delay="0.25">
-                            <div class="gradient-border gradient-border--surface-dark rounded-4 p-4 p-sm-8 p-xxl-12">
-                                <div class="d-flex align-items-center gap-3">
-                                    <iconify-icon icon="solar:star-shine-bold-duotone" class="d-inline-block flex-shrink-0 fs-24 text-light text-opacity-60"></iconify-icon>
-                                    <h6 class="text-light mb-0">Basic</h6>
+                    
+                        <% if (plans && plans.length > 0) { %>
+                            <% plans.forEach((plan, index)=> { %>
+                        
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="gradient-border gradient-border--surface-dark rounded-4 p-4 p-sm-8 p-xxl-12 position-relative">
+                        
+                                        <div class="d-flex align-items-center gap-3">
+                                            <iconify-icon icon="solar:star-shine-bold-duotone" class="fs-24 text-light text-opacity-60">
+                                            </iconify-icon>
+                        
+                                            <h6 class="text-light mb-0">
+                                                <%= plan.name %>
+                                            </h6>
+                        
+                                            <% if (plan.badge) { %>
+                                                <span class="badge bg-light bg-opacity-10 text-primary ms-auto">
+                                                    <%= plan.badge %>
+                                                </span>
+                                                <% } %>
+                                        </div>
+                        
+                                        <div class="d-flex align-items-baseline gap-2 mt-4 mb-6">
+                                            <h2 class="mb-0 text-light d-flex align-items-start gap-1">
+                                                <span class="mt-4 fs-14 fw-normal">$</span>
+                                                <span>
+                                                    <%= plan.price / 100 %>
+                                                </span>
+                                            </h2>
+                                            <p class="fs-14 text-light mt-auto">/ mo</p>
+                                        </div>
+                        
+                                        <ul class="list gap-3">
+                                            <% plan.features.forEach(feature=> { %>
+                                                <li class="d-flex align-items-center gap-2">
+                                                    <iconify-icon icon="bi:check-lg" class="text-light"></iconify-icon>
+                                                    <p class="mb-0 text-light fs-14 fw-medium">
+                                                        <%= feature %>
+                                                    </p>
+                                                </li>
+                                                <% }) %>
+                                        </ul>
+                        
+                                        <% if (!user) { %>
+                                            <a href="/user/login" class="btn btn-primary mt-8 w-100">
+                                                Login to Buy
+                                            </a>
+                                            <% } else { %>
+                                                <button onclick="buyPopularPlan('<%= plan.slug %>')" class="btn btn-primary mt-8 w-100">
+                                                    Buy Now
+                                                </button>
+                                                <% } %>
+                                    </div>
                                 </div>
-                                <div class="d-flex align-items-baseline gap-2 mt-4 mb-6">
-                                    <h2 class="mb-0 text-light d-flex align-items-start gap-1">
-                                        <span class="mt-4 fs-14 fw-normal d-inline-block">$</span>
-                                        <span class="d-inline-block"> 0 </span>
-                                    </h2>
-                                    <p class="fs-14 text-light mt-auto">/ mo</p>
+                                <% }); %>
+                        <% } else { %>
+                            <div class="col-12">
+                                <div class="alert alert-warning" role="alert">
+                                    No pricing plans available. Please try again later.
                                 </div>
-                                <p class="mb-8 text-light text-opacity-60"> For organizations ready to improve engineering velocity, code quality, and developer experience. </p>
-                                <ul class="list gap-3">
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium">Api Access</p>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium">User Analytics</p>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium"> 100 Captured Contacts </p>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium"> 2 Languages Support </p>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium"> Multi-Currency Support </p>
-                                    </li>
-                                </ul>
-                                <a href="sign-in-1.html" class="btn bg-light hover:bg-primary bg-opacity-5 text-primary hover:text-dark gap-1 justify-content-center align-items-center fw-semibold mt-8 w-100">
-                                    <span class="d-inline-block"> Buy Now </span>
-                                    <iconify-icon icon="solar:arrow-right-outline" class="align-middle fs-20 flex-shrink-0"></iconify-icon>
-                                </a>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4 price-card-4 gsap-fade-in" data-scroll-trigger="true" data-y="15" data-delay="0.5">
-                            <div class="gradient-border gradient-border--surface-dark rounded-4 p-4 p-sm-8 p-xxl-12 overflow-hidden">
-                                <div class="d-flex align-items-center gap-3">
-                                    <iconify-icon icon="solar:star-shine-bold-duotone" class="d-inline-block flex-shrink-0 fs-24 text-light text-opacity-60"></iconify-icon>
-                                    <h6 class="text-light mb-0">NextAi Pro</h6>
-                                    <span class="badge bg-light bg-opacity-10 text-primary ms-auto"> Popular </span>
-                                </div>
-                                <div class="d-flex align-items-baseline gap-2 mt-4 mb-6">
-                                    <h2 class="mb-0 text-light d-flex align-items-start gap-1">
-                                        <span class="mt-4 fs-14 fw-normal d-inline-block">$</span>
-                                        <span class="d-inline-block"> 49 </span>
-                                    </h2>
-                                    <p class="fs-14 text-light mt-auto">/ mo</p>
-                                </div>
-                                <p class="mb-8 text-light text-opacity-60"> For organizations ready to improve engineering velocity, code quality, and developer experience. </p>
-                                <ul class="list gap-3">
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium">Api Access</p>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium">User Analytics</p>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium"> 100 Captured Contacts </p>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium"> 2 Languages Support </p>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium"> Multi-Currency Support </p>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium"> 1 CMS collection </p>
-                                    </li>
-                                </ul>
-                                <a href="sign-in-1.html" class="btn btn-primary text-dark gap-1 justify-content-center align-items-center fw-semibold mt-8 w-100">
-                                    <span class="d-inline-block"> Buy Now </span>
-                                    <iconify-icon icon="solar:arrow-right-outline" class="align-middle fs-20 flex-shrink-0"></iconify-icon>
-                                </a>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="217" height="232" viewBox="0 0 217 232" fill="none" class="position-absolute start-0 top-0 pointer-none">
-                                    <g filter="url(#filter0_f_10155_7785)">
-                                        <circle cx="58" cy="73" r="99" fill="#C7F32F" fill-opacity="0.2" />
-                                    </g>
-                                    <defs>
-                                        <filter id="filter0_f_10155_7785" x="-101" y="-86" width="318" height="318" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                            <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                                            <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-                                            <feGaussianBlur stdDeviation="30" result="effect1_foregroundBlur_10155_7785" />
-                                        </filter>
-                                    </defs>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4 price-card-4 gsap-fade-in" data-scroll-trigger="true" data-y="15" data-delay="0.75">
-                            <div class="gradient-border gradient-border--surface-dark rounded-4 p-4 p-sm-8 p-xxl-12">
-                                <div class="d-flex align-items-center gap-3">
-                                    <iconify-icon icon="solar:star-shine-bold-duotone" class="d-inline-block flex-shrink-0 fs-24 text-light text-opacity-60"></iconify-icon>
-                                    <h6 class="text-light mb-0">Enterprise</h6>
-                                </div>
-                                <div class="d-flex align-items-baseline gap-2 mt-4 mb-6">
-                                    <h2 class="mb-0 text-light d-flex align-items-start gap-1">
-                                        <span class="mt-4 fs-14 fw-normal d-inline-block">$</span>
-                                        <span class="d-inline-block"> 99 </span>
-                                    </h2>
-                                    <p class="fs-14 text-light mt-auto">/ mo</p>
-                                </div>
-                                <p class="mb-8 text-light text-opacity-60"> For organizations ready to improve engineering velocity, code quality, and developer experience. </p>
-                                <ul class="list gap-3">
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium">Api Access</p>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium">User Analytics</p>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium"> 100 Captured Contacts </p>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium"> 2 Languages Support </p>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <iconify-icon icon="bi:check-lg" class="flex-shrink-0 d-inline-block text-light"></iconify-icon>
-                                        <p class="mb-0 text-light fs-14 fw-medium"> Multi-Currency Support </p>
-                                    </li>
-                                </ul>
-                                <a href="sign-in-1.html" class="btn bg-light hover:bg-primary bg-opacity-5 text-primary hover:text-dark gap-1 justify-content-center align-items-center fw-semibold mt-8 w-100">
-                                    <span class="d-inline-block"> Buy Now </span>
-                                    <iconify-icon icon="solar:arrow-right-outline" class="align-middle fs-20 flex-shrink-0"></iconify-icon>
-                                </a>
-                            </div>
-                        </div>
+                        <% } %>
+                    
                     </div>
+
                 </div>
                 <!-- Prcing Section End -->
                 <!-- Testimonial Section -->
@@ -1400,5 +1321,25 @@
             <!-- Footer End -->
         </div>
     </div>
+
+    <script>
+      async function buyPopularPlan(slug) {
+            console.log("Slug from button:", slug);
+
+            const res = await fetch("/payment/create-checkout-session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ slug })
+            });
+
+            const data = await res.json();
+            console.log("Stripe response:", data);
+
+            if (data.url) {
+                window.location.href = data.url;
+            }
+        }
+
+    </script>
 
 <%- include("partials/footer.ejs") %>

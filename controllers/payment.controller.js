@@ -1,71 +1,108 @@
 const Stripe = require("stripe");
-const plans = require("../config/plans");
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const planModel = require("../models/plan.model");
 const userModel = require("../models/user.model");
 
 
 
 const createPayment = async (req, res) => {
-    const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+    try {
 
-    const session = await stripe.checkout.sessions.create({
-        payment_method_types: ["card"],
-        mode: "payment",
-        line_items: [
-            {
+        const { slug } = req.body;
+        console.log(slug)
+
+        const plan = await planModel.findOne({ slug });
+
+        if (!plan) {
+            return res.status(400).json({ error: "Invalid plan" });
+        }
+
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ["card"],
+            mode: "payment",
+            line_items: [{
                 price_data: {
-                    currency: "usd",
-                    product_data: {
-                        name: "Popular Plan"
-                    },
-                    unit_amount: 2500,
+                    currency: plan.currency,
+                    product_data: { name: plan.name },
+                    unit_amount: plan.price,
                 },
                 quantity: 1,
-            },
-        ],
-        success_url: `${process.env.BASE_URL}/payment/popular-success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.BASE_URL}/pricing`,
-        metadata: {
-            userId: req.session.user.id
-        }
-    });
+            }],
+            success_url: `${process.env.BASE_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.BASE_URL}/`,
+            metadata: {
+                userId: req.session.user.id,
+                planSlug: plan.slug
+            }
+        });
 
-    res.json({ url: session.url });
-}
+        return res.json({ url: session.url });
+
+    } catch (error) {
+        console.error("Stripe error:", error);
+        return res.status(500).json({ error: error.message });
+    }
+};
 
 
 
 const successPayment = async (req, res) => {
-    const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+    try {
 
-    const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
+        const { session_id } = req.query;
+        const session = await stripe.checkout.sessions.retrieve(session_id);
 
-    if (session.payment_status !== "paid") {
-        return res.redirect("/pricing");
+        if (session.payment_status !== "paid") {
+            return res.redirect("/");
+        }
+
+        const userId = session.metadata.userId;
+        const planSlug = session.metadata.planSlug;
+
+        const user = await userModel.findById(userId);
+        const plan = await planModel.findOne({ slug: planSlug });
+
+        if (!user || !plan) {
+            return res.redirect("/");
+        }
+
+        // 🔐 Prevent double credit
+        const alreadyExists = user.purchases.find(p => p.stripeSessionId === session_id);
+        if (alreadyExists) {
+            return res.redirect("/dashboard");
+        }
+
+        // 🎯 Credit logic
+        if (plan.unlimited === true) {
+            user.hasUnlimitedTokens = true;
+            user.unlimitedTokensActivatedAt = new Date();
+        } else {
+            user.tokenBalance = Number(user.tokenBalance || 0) + Number(plan.tokens || 0);
+        }
+
+        user.purchases.push({
+            provider: "stripe",
+            planId: plan.slug,
+            stripeSessionId: session_id,
+            stripePaymentIntentId: session.payment_intent,
+            amount: Number(plan.price),
+            currency: plan.currency || "USD",
+            tokensAdded: Number(plan.tokens || 0),
+            unlimited: Boolean(plan.unlimited),
+            status: "paid",
+            paidAt: new Date()
+        });
+        console.log("Plan object:", plan);
+
+        await user.save();
+
+        res.redirect("/dashboard");
+
+    } catch (error) {
+        console.error(error);
+        res.redirect("/");
     }
+};
 
-    const user = await userModel.findById(session.metadata.userId);
-    if (!user) return res.redirect("/pricing");
-
-    const TOKENS_FOR_POPULAR = 2000;
-
-    user.tokenBalance += TOKENS_FOR_POPULAR;
-
-    user.purchases.push({
-        provider: "stripe",
-        planId: "popular",
-        amountPaise: 2500,
-        currency: "USD",
-        tokensAdded: TOKENS_FOR_POPULAR,
-        unlimited: false,
-        status: "paid",
-        paidAt: new Date()
-    });
-
-    await user.save();
-
-    req.session.user.tokens = user.tokenBalance;
-
-    res.redirect("/");
-}
 
 module.exports = { createPayment, successPayment }

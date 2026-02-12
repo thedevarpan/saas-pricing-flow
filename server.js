@@ -5,14 +5,16 @@ require("dotenv").config();
 const connectToDB = require("./db/db");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
-const paymentRouter = require("./routes/payment.routes")
+const paymentRouter = require("./routes/payment.routes");
 /* Invoked database connection */
 connectToDB();
 
 /* Import routes */
 const indexRouter = require("./routes/index.routes");
 const authRouter = require("./routes/auth.routes");
+const adminRouter = require("./routes/admin.routes");
 
+app.use("/payment/webhook", express.raw({ type: "application/json" }));
 /* Basic Express server setup */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -40,7 +42,7 @@ app.use(
 app.use((req, res, next) => {
     res.locals.errorMessage = req.session.errorMessage || null;
     res.locals.successMessage = req.session.successMessage || null;
-    
+
     delete req.session.errorMessage;
     delete req.session.successMessage;
 
@@ -75,6 +77,8 @@ app.use("/user", authRouter);
 /* */
 app.use("/payment", paymentRouter);
 
+/* Admin routes */
+app.use("/admin", adminRouter);
 
 app.listen(process.env.PORT || 3000, (err) => {
     if (!err) {

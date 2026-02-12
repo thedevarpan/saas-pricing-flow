@@ -51,54 +51,54 @@ const userSchema = new mongoose.Schema({
             provider: {
                 type: String,
                 enum: ["stripe"],
-                required: true,
                 default: "stripe",
             },
+
             planId: {
                 type: String,
                 required: true,
             },
-            amountPaise: {
+
+            stripeSessionId: {
+                type: String,
+            },
+
+            stripePaymentIntentId: {
+                type: String,
+            },
+
+            amount: {
                 type: Number,
                 required: true,
-                min: 0,
             },
+
             currency: {
                 type: String,
-                default: "INR",
+                default: "USD",
             },
+
             tokensAdded: {
                 type: Number,
                 default: 0,
-                min: 0,
             },
+
             unlimited: {
                 type: Boolean,
                 default: false,
             },
+
             status: {
                 type: String,
                 enum: ["created", "paid", "failed"],
                 default: "created",
             },
-            razorpayOrderId: {
-                type: String,
-            },
-            razorpayPaymentId: {
-                type: String,
-            },
-            razorpaySignature: {
-                type: String,
-            },
+
             paidAt: {
                 type: Date,
             },
-            createdAt: {
-                type: Date,
-                default: Date.now,
-            },
-        },
-    ],
+        }
+    ]
+
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);

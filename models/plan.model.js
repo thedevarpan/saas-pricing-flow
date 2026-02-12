@@ -3,40 +3,45 @@ const mongoose = require("mongoose");
 const planSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: true
     },
 
     slug: {
         type: String,
         required: true,
-        unique: true,
+        unique: true
     },
 
     price: {
-        type: Number, // in cents
-        required: true,
+        type: Number, 
+        required: true
     },
 
     currency: {
         type: String,
-        default: "usd",
+        default: "usd"
     },
 
-    tokens: {
+    tokens: {                 
         type: Number,
-        default: 0,
+        default: 0
     },
 
-    unlimited: {
+    unlimited: {             
         type: Boolean,
-        default: false,
+        default: false
     },
+
 
     features: [String],
 
+    badge: {
+        type: String,
+    },
+
     active: {
         type: Boolean,
-        default: true,
+        default: true
     }
 
 }, { timestamps: true });
