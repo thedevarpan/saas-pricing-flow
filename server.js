@@ -25,6 +25,7 @@ app.use(express.static("public"));
 
 
 /* Setup express session */
+app.set("trust proxy", 1);
 app.use(
     session({
         name: "user_session",
