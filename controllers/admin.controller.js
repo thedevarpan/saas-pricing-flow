@@ -13,6 +13,8 @@ const handleDashboard = async (req, res) => {
         users.forEach(user => {
             if (user.purchases && user.purchases.length > 0) {
                 user.purchases.forEach(purchase => {
+                    const amountPaise = Number(purchase.amountPaise) || 0;
+                    
                     payments.push({
                         user: {
                             fullname: user.fullname,
@@ -20,7 +22,7 @@ const handleDashboard = async (req, res) => {
                             username: user.username
                         },
                         planId: purchase.planId,
-                        amountPaise: purchase.amountPaise,
+                        amountPaise: amountPaise,
                         currency: purchase.currency,
                         tokensAdded: purchase.tokensAdded,
                         status: purchase.status,
@@ -31,7 +33,7 @@ const handleDashboard = async (req, res) => {
 
                     if (purchase.status === 'paid') {
                         totalPayments++;
-                        totalRevenue += purchase.amountPaise;
+                        totalRevenue += amountPaise;
                     }
                 });
             }

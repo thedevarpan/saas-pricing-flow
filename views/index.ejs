@@ -967,7 +967,7 @@
                                             <h2 class="mb-0 text-light d-flex align-items-start gap-1">
                                                 <span class="mt-4 fs-14 fw-normal">$</span>
                                                 <span>
-                                                    <%= plan.price / 100 %>
+                                                    <%= (Number(plan.price) / 100).toFixed(2) %>
                                                 </span>
                                             </h2>
                                             <p class="fs-14 text-light mt-auto">/ mo</p>
@@ -989,7 +989,7 @@
                                                 Login to Buy
                                             </a>
                                             <% } else { %>
-                                                <button onclick="buyPopularPlan('<%= plan.slug %>')" class="btn btn-primary mt-8 w-100">
+                                                <button onclick="buyPopularPlan('<%= plan.slug %>')" class="btn text-black btn-primary mt-8 w-100">
                                                     Buy Now
                                                 </button>
                                                 <% } %>

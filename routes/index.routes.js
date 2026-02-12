@@ -11,9 +11,9 @@ router.get("/", async (req, res) => {
 });
 
 /* Render pricing page */
-router.get("/pricing", (req, res) => {
-    res.render("pricing");
-});
+// router.get("/pricing", (req, res) => {
+//     res.render("pricing");
+// });
 
 
 module.exports = router;

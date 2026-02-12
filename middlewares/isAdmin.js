@@ -9,7 +9,7 @@ const isAdmin = (req, res, next) => {
 
     /* Check the role */
     if (req.session.user.role !== "admin") {
-        return res.status(403).render("errors/403", {
+        return res.status(403).render("403", {
             message: "Access denied. Admin only."
         });
     }

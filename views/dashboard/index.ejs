@@ -599,19 +599,12 @@
         </div>
         <ul class="sidebar-nav">
             <li><a href="/" class="active"><i class="bi bi-house-door-fill"></i> Home</a></li>
-            <li><a href="/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-            <li><a href="#"><i class="bi bi-folder-fill"></i> Projects</a></li>
-            <li><a href="#"><i class="bi bi-people-fill"></i> Users</a></li>
-            <li><a href="/pricing"><i class="bi bi-tag-fill"></i> Pricing</a></li>
-            <li><a href="#"><i class="bi bi-gear-fill"></i> Settings</a></li>
+            <li><a href="/admin/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+            <li><a href=""><i class="bi bi-folder-fill"></i> Projects</a></li>
+            <li><a href=""><i class="bi bi-people-fill"></i> Users</a></li>
+            
         </ul>
-        <div class="sidebar-footer">
-            <div class="upgrade-card">
-                <h4>Upgrade to Pro</h4>
-                <p>Get 1 month free and unlock premium features</p>
-                <button class="btn">Upgrade</button>
-            </div>
-        </div>
+        
     </div>
 
     <!-- Main Content -->
@@ -678,21 +671,6 @@
                 </div>
             </div>
 
-            <div class="stats-card revenue">
-                <div class="stats-card-header">
-                    <div class="stats-card-icon">
-                        <i class="bi bi-currency-dollar"></i>
-                    </div>
-                </div>
-                <h3>Total Revenue</h3>
-                <div class="stats-value">$<%= (totalRevenue / 100).toFixed(2) || 0 %></div>
-                <div>
-                    <span class="stats-change positive">
-                        <i class="bi bi-arrow-up"></i> +15%
-                    </span>
-                    <span class="stats-meta">from last period</span>
-                </div>
-            </div>
         </div>
 
         <!-- Users Section -->
@@ -791,7 +769,8 @@
                             <tr>
                                 <th>User</th>
                                 <th>Plan</th>
-                                <th>Amount</th>
+                               
+                                
                                 <th>Currency</th>
                                 <th>Tokens Added</th>
                                 <th>Status</th>
@@ -818,11 +797,8 @@
                                         <i class="bi bi-box"></i> <%= payment.planId %>
                                     </span>
                                 </td>
-                                <td>
-                                    <span class="amount">
-                                        $<%= (payment.amountPaise / 100).toFixed(2) %>
-                                    </span>
-                                </td>
+                                
+                                
                                 <td><strong><%= payment.currency %></strong></td>
                                 <td>
                                     <span class="tokens-badge">

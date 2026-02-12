@@ -6,7 +6,7 @@ const { isAdmin } = require("../middlewares/isAdmin");
 
 
 /* Dashboard route */
-router.get("/dashboard", isAuthenticated, handleDashboard);
+router.get("/dashboard", isAuthenticated, isAdmin, handleDashboard);
 
 module.exports = router;
 

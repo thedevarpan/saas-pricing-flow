@@ -93,6 +93,13 @@ app.use("/payment", paymentRouter);
 /* Admin routes */
 app.use("/admin", adminRouter);
 
+/* Handle 404 errors */
+app.use((req, res, next) => {
+    res.status(404).render("404");
+});
+
+
+/* Listen to server */
 app.listen(process.env.PORT || 3000, (err) => {
     if (!err) {
         console.log(`Server is running on port ${process.env.PORT || 3000}`);
