@@ -9,10 +9,7 @@ router.get("/", (req, res) => {
 
 /* Render pricing page */
 router.get("/pricing", (req, res) => {
-    res.render("pricing", {
-        tokenPlans: TOKEN_PLANS,
-        razorpayKeyId: process.env.RAZORPAY_KEY_ID || "",
-    });
+    res.render("pricing");
 });
 
 module.exports = router;
