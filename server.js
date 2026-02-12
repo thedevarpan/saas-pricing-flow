@@ -20,6 +20,10 @@ app.use("/payment/webhook", express.raw({ type: "application/json" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+/* Server static fils */
+app.use(express.static("public"));
+
+
 /* Setup express session */
 app.use(
     session({
@@ -33,7 +37,7 @@ app.use(
         }),
         cookie: {
             httpOnly: true,
-            secure: false, // true in production (HTTPS)
+            secure: true, // true in production (HTTPS)
             maxAge: 1000 * 60 * 60 * 24, // 1 day
         },
     })
@@ -99,10 +103,17 @@ app.use((req, res, next) => {
 });
 
 
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).render("errors/500");
+});
+
+
 /* Listen to server */
-app.listen(process.env.PORT || 3000, (err) => {
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, (err) => {
     if (!err) {
-        console.log(`Server is running on port ${process.env.PORT || 3000}`);
+        console.log(`Server is running on port ${PORT}`);
     } else {
         console.error("Error starting server:", err);
     }
