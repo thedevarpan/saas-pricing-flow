@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { TOKEN_PLANS } = require("../config/tokenPlans");
+const { TOKEN_PLANS } = require("../config/plans");
 
 /* GET / page */
 router.get("/", (req, res) => {

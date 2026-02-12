@@ -5,7 +5,7 @@ require("dotenv").config();
 const connectToDB = require("./db/db");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
-
+const paymentRouter = require("./routes/payment.routes")
 /* Invoked database connection */
 connectToDB();
 
@@ -72,6 +72,8 @@ app.use("/", indexRouter);
 /* Authentication routes*/
 app.use("/user", authRouter);
 
+/* */
+app.use("/payment", paymentRouter);
 
 
 app.listen(process.env.PORT || 3000, (err) => {

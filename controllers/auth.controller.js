@@ -107,5 +107,21 @@ const handleLogin = async (req, res) => {
     }
 }
 
+const logout = async (req, res) => {
+    req.session.successMessage = "Logged out successfully.";
 
-module.exports = { handleSignup, handleLogin };
+    req.session.save(() => {
+        req.session.destroy((err) => {
+            if (err) {
+                console.log(err);
+                return res.redirect("/dashboard");
+            }
+
+            res.clearCookie("user_session");
+            res.redirect("/user/login");
+        });
+    });
+}
+
+
+module.exports = { handleSignup, handleLogin, logout };

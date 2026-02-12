@@ -50,9 +50,9 @@ const userSchema = new mongoose.Schema({
         {
             provider: {
                 type: String,
-                enum: ["razorpay"],
+                enum: ["stripe"],
                 required: true,
-                default: "razorpay",
+                default: "stripe",
             },
             planId: {
                 type: String,

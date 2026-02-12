@@ -85,7 +85,9 @@
                                             <h4 class="mb-0">$0</h4>
                                             <p class="mb-0 fs-14">/mo</p>
                                         </div>
-                                        <a href="sign-in-1.html" class="btn btn-sm btn-outline-primary"> Get Started for Free </a>
+                                        <a href="" onclick="buyPlan('standard')" class="btn btn-sm btn-outline-primary">
+                                            Get Started
+                                        </a>
                                         <p class="my-6 fs-14"> For teams working on growing and scaling their community </p>
                                         <p class="text-heading fw-bold">Everything is Basic</p>
                                         <ul class="list gap-3">
@@ -173,7 +175,20 @@
                                             <h4 class="mb-0">$25</h4>
                                             <p class="mb-0 fs-14">/mo</p>
                                         </div>
-                                        <a href="sign-in-1.html" class="btn btn-sm btn-primary"> Get Started for Free </a>
+                                        <% if (!user) { %>
+                                        
+                                            <a href="/user/login" class="btn btn-sm btn-primary">
+                                                Login to Purchase
+                                            </a>
+                                        
+                                            <% } else { %>
+                                        
+                                                <button onclick="buyPopularPlan()" class="btn btn-sm btn-primary">
+                                                    Upgrade to Popular
+                                                </button>
+                                        
+                                        <% } %>
+
                                         <p class="my-6 fs-14"> For teams working on growing and scaling their community </p>
                                         <p class="text-heading fw-bold">Everything is Basic</p>
                                         <ul class="list gap-3">
@@ -1563,4 +1578,20 @@
             <!-- Footer End -->
         </div>
     </div>
+    <script>
+        async function buyPopularPlan() {
+            const res = await fetch("/payment/create-popular-checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            });
+
+            const data = await res.json();
+
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                alert("Something went wrong");
+            }
+        }
+    </script>
 <%- include("partials/footer.ejs") %>
