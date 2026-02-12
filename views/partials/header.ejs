@@ -62,8 +62,13 @@
                 
                             <!-- Token Display -->
                             <div class="badge bg-warning text-dark fw-semibold px-3 py-2 rounded-pill d-flex align-items-center gap-2">
-                                <iconify-icon icon="mdi:coin" width="18"></iconify-icon>
-                                <span>Tokens: <%= user.tokens || 0 %></span>
+                            <iconify-icon icon="mdi:coin" width="18"></iconify-icon>
+                            
+                            <% if (user.hasUnlimitedTokens) { %>
+                                <span>Unlimited</span>
+                                <% } else { %>
+                                    <span>Tokens: <%= user.tokenBalance || 0 %></span>
+                                    <% } %>
                             </div>
 
                 

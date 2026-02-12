@@ -59,7 +59,7 @@ const handleLogin = async (req, res) => {
     try {
         const errors = validationResult(req);
 
-        if (!errors.isEmpty) {
+        if (!errors.isEmpty()) {
             req.session.errorMessage = errors.array()[0].msg;
             return req.session.save(() => {
                 res.redirect("/user/login");
@@ -88,8 +88,7 @@ const handleLogin = async (req, res) => {
         req.session.user = {
             id: user._id,
             username: user.username,
-            role: user.role,
-            tokens: user.token,
+            role: user.role
         };
 
         req.session.successMessage = "Login successful!";

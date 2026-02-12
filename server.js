@@ -6,6 +6,7 @@ const connectToDB = require("./db/db");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const paymentRouter = require("./routes/payment.routes");
+const userModel = require("./models/user.model");
 /* Invoked database connection */
 connectToDB();
 
@@ -54,6 +55,18 @@ app.use((req, res, next) => {
     res.locals.user = req.session.user || null;
     next();
 });
+
+
+app.use(async (req, res, next) => {
+    if (req.session.user?.id) {
+        const user = await userModel.findById(req.session.user.id);
+        res.locals.user = user;
+    } else {
+        res.locals.user = null;
+    }
+    next();
+});
+
 
 
 /* Setup ejs*/
