@@ -988,11 +988,27 @@
                                             <a href="/user/login" class="text-black btn btn-primary mt-8 w-100">
                                                 Login to Buy
                                             </a>
+                                        <% } else if (user.hasUnlimitedTokens) { %>
+                                            <button disabled class="btn btn-secondary mt-8 w-100" style="cursor: not-allowed;" onclick="notify.info('You already have an Unlimited Plan!')">
+                                                You have Unlimited Plan
+                                            </button>
+                                        <% } else { %>
+                                            <%
+                                                // Check if user has already purchased this plan
+                                                const hasPurchased = user.purchases && user.purchases.some(p => {
+                                                    return p.planId.toLowerCase().includes(plan.slug.toLowerCase()) && p.status === 'paid';
+                                                });
+                                            %>
+                                            <% if (hasPurchased) { %>
+                                                <button disabled class="btn btn-success mt-8 w-100" style="cursor: not-allowed; opacity: 0.7;">
+                                                    ✓ Already Purchased
+                                                </button>
                                             <% } else { %>
                                                 <button onclick="buyPopularPlan('<%= plan.slug %>')" class="btn text-black btn-primary mt-8 w-100">
                                                     Buy Now
                                                 </button>
-                                                <% } %>
+                                            <% } %>
+                                        <% } %>
                                     </div>
                                 </div>
                                 <% }); %>
@@ -1326,17 +1342,24 @@
       async function buyPopularPlan(slug) {
             console.log("Slug from button:", slug);
 
-            const res = await fetch("/payment/create-checkout-session", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ slug })
-            });
+            try {
+                const res = await fetch("/payment/create-checkout-session", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ slug })
+                });
 
-            const data = await res.json();
-            console.log("Stripe response:", data);
+                const data = await res.json();
+                console.log("Stripe response:", data);
 
-            if (data.url) {
-                window.location.href = data.url;
+                if (data.url) {
+                    window.location.href = data.url;
+                } else if (data.error) {
+                    notify.error(data.error);
+                }
+            } catch (error) {
+                console.error("Payment error:", error);
+                notify.error("Failed to initiate payment. Please try again.");
             }
         }
 

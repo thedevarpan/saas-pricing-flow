@@ -39,12 +39,15 @@ mongoose.connect(process.env.MONGODB_URI)
                 name: "Enterprise",
                 slug: "enterprise",
                 price: 9900,
+                unlimited: true,
                 features: [
                     "Api Access",
                     "User Analytics",
-                    "100 Captured Contacts",
-                    "2 Languages Support",
-                    "Multi-Currency Support"
+                    "Unlimited Captured Contacts",
+                    "All Languages Support",
+                    "Multi-Currency Support",
+                    "Unlimited CMS Collections",
+                    "Priority Support"
                 ]
             }
         ]);
