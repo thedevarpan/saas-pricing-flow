@@ -11,7 +11,7 @@ const createPayment = async (req, res) => {
         const { slug } = req.body;
         console.log(slug)
 
-        // Check if user already has unlimited plan
+        /* Check if user already has unlimited plan */
         const user = await userModel.findById(req.session.user.id);
         
         if (user.hasUnlimitedTokens) {
@@ -75,7 +75,7 @@ const successPayment = async (req, res) => {
             return res.redirect("/");
         }
 
-        // Check if user already has unlimited tokens
+        /* Check if user already has unlimited tokens */
         if (user.hasUnlimitedTokens) {
             req.session.errorMessage = "You already have an Unlimited Plan!";
             return req.session.save(() => {
@@ -83,13 +83,13 @@ const successPayment = async (req, res) => {
             });
         }
 
-        // 🔐 Prevent double credit
+        /* Prevent double credit*/
         const alreadyExists = user.purchases.find(p => p.stripeSessionId === session_id);
         if (alreadyExists) {
             return res.redirect("/");
         }
 
-        // 🎯 Credit logic
+        /* Credit logic*/
         if (plan.unlimited === true) {
             user.hasUnlimitedTokens = true;
             user.unlimitedTokensActivatedAt = new Date();
@@ -113,7 +113,7 @@ const successPayment = async (req, res) => {
 
         await user.save();
 
-        // Set payment success data for congratulations popup
+        /* Payment congratulations popup*/
         req.session.paymentSuccess = {
             planName: plan.name,
             unlimited: plan.unlimited,
