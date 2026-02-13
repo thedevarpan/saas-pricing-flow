@@ -48,9 +48,11 @@ app.use(
 app.use((req, res, next) => {
     res.locals.errorMessage = req.session.errorMessage || null;
     res.locals.successMessage = req.session.successMessage || null;
+    res.locals.paymentSuccess = req.session.paymentSuccess || null;
 
     delete req.session.errorMessage;
     delete req.session.successMessage;
+    delete req.session.paymentSuccess;
 
     next();
 });

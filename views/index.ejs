@@ -159,7 +159,7 @@
             </div>
             <!-- Hero End -->
             <!-- Feature Section -->
-            <div class="section-space-md-y">
+            <div id="about" class="section-space-md-y">
                 <div class="section-space-sm-bottom">
                     <div class="container">
                         <div class="row">
@@ -927,7 +927,7 @@
                 </div>
             </div>
             <!-- Integration Tools End -->
-            <div class="section-space-md-top section-space-bottom position-relative z-1 overflow-hidden">
+            <div id="pricing" class="section-space-md-top section-space-bottom position-relative z-1 overflow-hidden">
                 <!-- Prcing Section -->
                 <div class="section-space-sm-bottom">
                     <div class="container">
@@ -993,21 +993,9 @@
                                                 You have Unlimited Plan
                                             </button>
                                         <% } else { %>
-                                            <%
-                                                // Check if user has already purchased this plan
-                                                const hasPurchased = user.purchases && user.purchases.some(p => {
-                                                    return p.planId.toLowerCase().includes(plan.slug.toLowerCase()) && p.status === 'paid';
-                                                });
-                                            %>
-                                            <% if (hasPurchased) { %>
-                                                <button disabled class="btn btn-success mt-8 w-100" style="cursor: not-allowed; opacity: 0.7;">
-                                                    ✓ Already Purchased
-                                                </button>
-                                            <% } else { %>
-                                                <button onclick="buyPopularPlan('<%= plan.slug %>')" class="btn text-black btn-primary mt-8 w-100">
-                                                    Buy Now
-                                                </button>
-                                            <% } %>
+                                            <button onclick="buyPopularPlan('<%= plan.slug %>')" class="btn text-black btn-primary mt-8 w-100">
+                                                Buy Now
+                                            </button>
                                         <% } %>
                                     </div>
                                 </div>
@@ -1362,7 +1350,366 @@
                 notify.error("Failed to initiate payment. Please try again.");
             }
         }
-
     </script>
+
+    <!-- Congratulations Modal for Payment Success -->
+    <% if (paymentSuccess) { %>
+    <div id="congratsModal" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.3s ease-in;
+        padding: 20px;
+    ">
+        <div style="
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: 16px;
+            padding: 32px 28px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(124, 58, 237, 0.15);
+            animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        ">
+            <!-- AI Glow Effect -->
+            <div style="
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+                animation: rotate 10s linear infinite;
+                pointer-events: none;
+            "></div>
+
+            <!-- Close Button -->
+            <button onclick="closeCongratsModal()" style="
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                color: #94a3b8;
+                width: 28px;
+                height: 28px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s;
+                z-index: 2;
+            " onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'; this.style.borderColor='rgba(239, 68, 68, 0.3)'; this.style.color='#ef4444'" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.1)'; this.style.color='#94a3b8'">
+                ✕
+            </button>
+
+            <!-- Success Badge with AI Icon -->
+            <div style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(167, 139, 250, 0.2) 100%);
+                border: 1px solid rgba(124, 58, 237, 0.3);
+                border-radius: 50px;
+                padding: 8px 16px;
+                margin: 0 auto 20px;
+                width: fit-content;
+                animation: scaleIn 0.5s ease-out 0.2s backwards;
+                position: relative;
+                z-index: 1;
+            ">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation: sparkle 2s ease-in-out infinite;">
+                    <path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z" fill="#a78bfa" stroke="#7c3aed" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="2" fill="#7c3aed"/>
+                </svg>
+                <span style="color: #a78bfa; font-size: 13px; font-weight: 600; letter-spacing: 0.5px;">AI POWERED</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 12L11 14L15 10" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="12" r="9" stroke="#10b981" stroke-width="2"/>
+                </svg>
+            </div>
+
+            <!-- Title -->
+            <h3 style="
+                color: #ffffff;
+                font-size: 24px;
+                margin: 0 0 8px 0;
+                font-weight: 700;
+                text-align: center;
+                letter-spacing: -0.5px;
+                animation: slideUp 0.5s ease-out 0.3s backwards;
+                position: relative;
+                z-index: 1;
+            ">
+                Payment Successful!
+            </h3>
+
+            <!-- Subtitle -->
+            <p style="
+                color: #94a3b8;
+                font-size: 14px;
+                margin: 0 0 24px 0;
+                text-align: center;
+                animation: slideUp 0.5s ease-out 0.4s backwards;
+                position: relative;
+                z-index: 1;
+            ">
+                <% if (paymentSuccess.unlimited) { %>
+                    Your account has been upgraded to unlimited access
+                <% } else { %>
+                    <%= paymentSuccess.tokens %> AI tokens added to your account
+                <% } %>
+            </p>
+
+            <!-- Plan Info Card -->
+            <div style="
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(124, 58, 237, 0.2);
+                border-radius: 12px;
+                padding: 16px;
+                margin-bottom: 20px;
+                animation: slideUp 0.5s ease-out 0.5s backwards;
+                position: relative;
+                z-index: 1;
+            ">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="
+                            width: 32px;
+                            height: 32px;
+                            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+                            border-radius: 8px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z" fill="white" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div style="color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Plan</div>
+                            <div style="color: #ffffff; font-size: 15px; font-weight: 600;"><%= paymentSuccess.planName %></div>
+                        </div>
+                    </div>
+                    <div style="
+                        background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+                        padding: 6px 14px;
+                        border-radius: 20px;
+                        color: white;
+                        font-size: 16px;
+                        font-weight: 700;
+                        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+                    ">
+                        $<%= paymentSuccess.amount %>
+                    </div>
+                </div>
+                
+                <!-- Features -->
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding-top: 12px;
+                    border-top: 1px solid rgba(124, 58, 237, 0.15);
+                ">
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="#10b981" stroke-width="2"/>
+                            <path d="M9 12l2 2 4-4" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span style="color: #64748b; font-size: 12px;">
+                            <% if (paymentSuccess.unlimited) { %>
+                                Unlimited tokens
+                            <% } else { %>
+                                <%= paymentSuccess.tokens %> tokens
+                            <% } %>
+                        </span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                        <span style="color: #64748b; font-size: 12px;">Instant activation</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Button -->
+            <button onclick="closeCongratsModal()" style="
+                width: 100%;
+                background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+                border: none;
+                padding: 12px;
+                border-radius: 10px;
+                color: white;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s;
+                animation: slideUp 0.5s ease-out 0.6s backwards;
+                box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+                position: relative;
+                z-index: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(124, 58, 237, 0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(124, 58, 237, 0.4)'">
+                <span>Continue to Dashboard</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { 
+                transform: rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            50% { 
+                transform: rotate(180deg) scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+
+    <script>
+        function closeCongratsModal() {
+            const modal = document.getElementById('congratsModal');
+            if (modal) {
+                modal.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    modal.remove();
+                }, 300);
+            }
+        }
+
+        // Subtle AI particles effect
+        function createAIParticles() {
+            const colors = ['#7c3aed', '#a78bfa', '#c4b5fd', '#ddd6fe'];
+            const particleCount = 25;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                const size = Math.random() * 6 + 3;
+                const startX = Math.random() * 100;
+                const delay = Math.random() * 2;
+                
+                particle.style.cssText = `
+                    position: fixed;
+                    width: ${size}px;
+                    height: ${size}px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    border-radius: 50%;
+                    top: -20px;
+                    left: ${startX}%;
+                    opacity: 0.6;
+                    box-shadow: 0 0 ${size * 2}px ${colors[Math.floor(Math.random() * colors.length)]};
+                    animation: particleFall ${Math.random() * 4 + 3}s ease-in ${delay}s forwards;
+                    z-index: 100000;
+                    pointer-events: none;
+                `;
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 7000);
+            }
+        }
+
+        // Add particle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particleFall {
+                0% {
+                    transform: translateY(0) translateX(0) scale(1);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 0.6;
+                }
+                90% {
+                    opacity: 0.3;
+                }
+                100% {
+                    transform: translateY(100vh) translateX(${Math.random() * 100 - 50}px) scale(0.5);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Trigger subtle particles when modal loads
+        if (document.getElementById('congratsModal')) {
+            setTimeout(createAIParticles, 300);
+        }
+
+        // Auto close after 12 seconds
+        setTimeout(closeCongratsModal, 12000);
+    </script>
+    <% } %>
 
 <%- include("partials/footer.ejs") %>

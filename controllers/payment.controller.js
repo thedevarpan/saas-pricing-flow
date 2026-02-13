@@ -79,14 +79,14 @@ const successPayment = async (req, res) => {
         if (user.hasUnlimitedTokens) {
             req.session.errorMessage = "You already have an Unlimited Plan!";
             return req.session.save(() => {
-                res.redirect("/dashboard");
+                res.redirect("/");
             });
         }
 
         // 🔐 Prevent double credit
         const alreadyExists = user.purchases.find(p => p.stripeSessionId === session_id);
         if (alreadyExists) {
-            return res.redirect("/dashboard");
+            return res.redirect("/");
         }
 
         // 🎯 Credit logic
@@ -113,13 +113,16 @@ const successPayment = async (req, res) => {
 
         await user.save();
 
-        // Set success message
-        req.session.successMessage = plan.unlimited 
-            ? `🎉 Congratulations! You now have Unlimited Access!`
-            : `✅ ${plan.name} plan purchased successfully! ${plan.tokens} tokens added.`;
+        // Set payment success data for congratulations popup
+        req.session.paymentSuccess = {
+            planName: plan.name,
+            unlimited: plan.unlimited,
+            tokens: plan.tokens,
+            amount: (plan.price / 100).toFixed(2)
+        };
 
         req.session.save(() => {
-            res.redirect("/dashboard");
+            res.redirect("/");
         });
 
     } catch (error) {
