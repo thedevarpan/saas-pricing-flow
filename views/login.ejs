@@ -164,29 +164,19 @@
         </div>
     </div>
     <!-- Scripts -->
+    <script src="/assets/js/notifications.js"></script>
     <script>
-        const errorMessage = "<%= errorMessage || '' %>";
-        const successMessage = "<%= successMessage || '' %>";
+        const errorMessage = <%- JSON.stringify(errorMessage || null) %>;
+        const successMessage = <%- JSON.stringify(successMessage || null) %>;
 
         if (errorMessage) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: errorMessage,
-                confirmButtonColor: "#d33"
-            });
+            notify.error(errorMessage);
         }
 
         if (successMessage) {
-            Swal.fire({
-                icon: "success",
-                title: "Success",
-                text: successMessage,
-                confirmButtonColor: "#3085d6"
-            });
+            notify.success(successMessage);
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/assets/js/bootstrap.bundle.js"></script>
     <script src="/assets/js/iconify.js"></script>
     <script src="/assets/js/simplebar.js"></script>
