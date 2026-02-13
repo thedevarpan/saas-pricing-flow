@@ -41,7 +41,9 @@ const handleSignup = async (req, res) => {
         await newUser.save();
 
         req.session.successMessage = "Signup successful! You can login now.";
-        return res.status(201).redirect("/user/login");
+        return req.session.save(() => {
+            res.status(201).redirect("/user/login");
+        });
 
     } catch (error) {
         console.error(error);
